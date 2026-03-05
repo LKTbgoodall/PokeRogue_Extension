@@ -7,24 +7,24 @@ const coords = {
 };
 
 const typesData = {
-  Normal: { color: "#A8A77A", rgb: [168, 167, 122], icon: "normal" },
-  Feu: { color: "#EE8130", rgb: [238, 129, 48], icon: "fire" },
-  Eau: { color: "#6390F0", rgb: [99, 144, 240], icon: "water" },
-  Plante: { color: "#7AC74C", rgb: [122, 199, 76], icon: "grass" },
-  Électrik: { color: "#F7D02C", rgb: [247, 208, 44], icon: "electric" },
-  Glace: { color: "#96D9D6", rgb: [150, 217, 214], icon: "ice" },
-  Combat: { color: "#C22E28", rgb: [194, 46, 40], icon: "fighting" },
-  Poison: { color: "#A33EA1", rgb: [163, 62, 161], icon: "poison" },
-  Sol: { color: "#E2BF65", rgb: [226, 191, 101], icon: "ground" },
-  Vol: { color: "#A98FF3", rgb: [169, 143, 243], icon: "flying" },
-  Psy: { color: "#F95587", rgb: [249, 85, 135], icon: "psychic" },
-  Insecte: { color: "#A6B91A", rgb: [166, 185, 26], icon: "bug" },
-  Roche: { color: "#B6A136", rgb: [182, 161, 54], icon: "rock" },
-  Spectre: { color: "#735797", rgb: [115, 87, 151], icon: "ghost" },
-  Dragon: { color: "#6F35FC", rgb: [111, 53, 252], icon: "dragon" },
-  Ténèbres: { color: "#705746", rgb: [112, 87, 70], icon: "dark" },
-  Acier: { color: "#B7B7CE", rgb: [183, 183, 206], icon: "steel" },
-  Fée: { color: "#D685AD", rgb: [214, 133, 173], icon: "fairy" },
+  Normal: { rgb: [168, 167, 122] },
+  Feu: { rgb: [238, 129, 48] },
+  Eau: { rgb: [99, 144, 240] },
+  Plante: { rgb: [122, 199, 76] },
+  Électrik: { rgb: [247, 208, 44] },
+  Glace: { rgb: [150, 217, 214] },
+  Combat: { rgb: [194, 46, 40] },
+  Poison: { rgb: [163, 62, 161] },
+  Sol: { rgb: [226, 191, 101] },
+  Vol: { rgb: [169, 143, 243] },
+  Psy: { rgb: [249, 85, 135] },
+  Insecte: { rgb: [166, 185, 26] },
+  Roche: { rgb: [182, 161, 54] },
+  Spectre: { rgb: [115, 87, 151] },
+  Dragon: { rgb: [111, 53, 252] },
+  Ténèbres: { rgb: [112, 87, 70] },
+  Acier: { rgb: [183, 183, 206] },
+  Fée: { rgb: [214, 133, 173] },
 };
 
 const typeChart = {
@@ -160,7 +160,7 @@ function buildHTML(selectedTypes) {
   if (selectedTypes.length === 0) return "";
 
   const titleText = selectedTypes.join(" / ");
-  let html = `<div class="pr-title">${titleText}</div>`;
+  let html = `<div class="pr-card-content"><div class="pr-title">Ennemi détecté [${titleText}]</div>`;
 
   let matchups = {};
   Object.keys(typesData).forEach((t) => (matchups[t] = 1));
@@ -171,36 +171,40 @@ function buildHTML(selectedTypes) {
     typeChart[t].imm.forEach((x) => (matchups[x] *= 0));
   });
 
-  const categories = {
-    "Dégâts x4": [],
-    "Dégâts x2": [],
-    "Dégâts x0.5": [],
-    "Dégâts x0.25": [],
-    "Immunisé (x0)": [],
-  };
+  let buffs = [];
+  let debuffs = [];
 
   for (let [type, val] of Object.entries(matchups)) {
-    if (val === 4) categories["Dégâts x4"].push(type);
-    if (val === 2) categories["Dégâts x2"].push(type);
-    if (val === 0.5) categories["Dégâts x0.5"].push(type);
-    if (val === 0.25) categories["Dégâts x0.25"].push(type);
-    if (val === 0) categories["Immunisé (x0)"].push(type);
+    if (val === 4) buffs.push(`${type} (x4)`);
+    if (val === 2) buffs.push(`${type} (x2)`);
+    if (val === 0.5) debuffs.push(`${type} (x0.5)`);
+    if (val === 0.25) debuffs.push(`${type} (x0.25)`);
+    if (val === 0) debuffs.push(`${type} (x0)`);
   }
 
-  for (let [catTitle, list] of Object.entries(categories)) {
-    if (list.length > 0) {
-      html += `<div class="pr-group"><h3>${catTitle}</h3><div class="pr-badges">`;
-      list.forEach((type) => {
-        const color = typesData[type].color;
-        const icon = typesData[type].icon;
-        html += `<div class="pr-badge" style="background-color:${color}">
-                            <img src="https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/${icon}.svg">
-                            ${type}
-                         </div>`;
-      });
-      html += `</div></div>`;
-    }
+  if (buffs.length > 0) {
+    html += `<div class="pr-section pr-buff"><div class="pr-label">[TAPER AVEC] :</div><div class="pr-value">${buffs.join(", ")}</div></div>`;
   }
+
+  if (debuffs.length > 0) {
+    html += `<div class="pr-section pr-debuff"><div class="pr-label">[DEBUFF] :</div><div class="pr-value">${debuffs.join(", ")}</div></div>`;
+  }
+
+  let dangerTypes = new Set();
+  selectedTypes.forEach((enemyType) => {
+    Object.keys(typeChart).forEach((myType) => {
+      if (typeChart[myType].weak.includes(enemyType)) {
+        dangerTypes.add(myType);
+      }
+    });
+  });
+
+  const dangerArray = Array.from(dangerTypes);
+  if (dangerArray.length > 0) {
+    html += `<div class="pr-section pr-danger"><div class="pr-label">[DANGER] :</div><div class="pr-value">${dangerArray.join(", ")}</div></div>`;
+  }
+
+  html += `</div>`;
   return html;
 }
 
@@ -213,7 +217,6 @@ scanBtn.addEventListener("click", () => {
 
   cardP1.style.top = `${rect.top + rect.height * 0.12}px`;
   cardP1.style.left = `${rect.left + rect.width * 0.43}px`;
-
   cardP2.style.top = `${rect.top + rect.height * 0.28}px`;
   cardP2.style.left = `${rect.left + rect.width * 0.41}px`;
 

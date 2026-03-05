@@ -7,24 +7,24 @@ const coords = {
 };
 
 const typesData = {
-  Normal: { color: "#A8A77A", rgb: [168, 167, 122], icon: "normal" },
-  Feu: { color: "#EE8130", rgb: [238, 129, 48], icon: "fire" },
-  Eau: { color: "#6390F0", rgb: [99, 144, 240], icon: "water" },
-  Plante: { color: "#7AC74C", rgb: [122, 199, 76], icon: "grass" },
-  Électrik: { color: "#F7D02C", rgb: [247, 208, 44], icon: "electric" },
-  Glace: { color: "#96D9D6", rgb: [150, 217, 214], icon: "ice" },
-  Combat: { color: "#C22E28", rgb: [194, 46, 40], icon: "fighting" },
-  Poison: { color: "#A33EA1", rgb: [163, 62, 161], icon: "poison" },
-  Sol: { color: "#E2BF65", rgb: [226, 191, 101], icon: "ground" },
-  Vol: { color: "#A98FF3", rgb: [169, 143, 243], icon: "flying" },
-  Psy: { color: "#F95587", rgb: [249, 85, 135], icon: "psychic" },
-  Insecte: { color: "#A6B91A", rgb: [166, 185, 26], icon: "bug" },
-  Roche: { color: "#B6A136", rgb: [182, 161, 54], icon: "rock" },
-  Spectre: { color: "#735797", rgb: [115, 87, 151], icon: "ghost" },
-  Dragon: { color: "#6F35FC", rgb: [111, 53, 252], icon: "dragon" },
-  Ténèbres: { color: "#705746", rgb: [112, 87, 70], icon: "dark" },
-  Acier: { color: "#B7B7CE", rgb: [183, 183, 206], icon: "steel" },
-  Fée: { color: "#D685AD", rgb: [214, 133, 173], icon: "fairy" },
+  Normal: { rgb: [168, 167, 122] },
+  Feu: { rgb: [238, 129, 48] },
+  Eau: { rgb: [99, 144, 240] },
+  Plante: { rgb: [122, 199, 76] },
+  Électrik: { rgb: [247, 208, 44] },
+  Glace: { rgb: [150, 217, 214] },
+  Combat: { rgb: [194, 46, 40] },
+  Poison: { rgb: [163, 62, 161] },
+  Sol: { rgb: [226, 191, 101] },
+  Vol: { rgb: [169, 143, 243] },
+  Psy: { rgb: [249, 85, 135] },
+  Insecte: { rgb: [166, 185, 26] },
+  Roche: { rgb: [182, 161, 54] },
+  Spectre: { rgb: [115, 87, 151] },
+  Dragon: { rgb: [111, 53, 252] },
+  Ténèbres: { rgb: [112, 87, 70] },
+  Acier: { rgb: [183, 183, 206] },
+  Fée: { rgb: [214, 133, 173] },
 };
 
 const typeChart = {
@@ -137,13 +137,8 @@ function getClosestType(r, g, b) {
   return closestType;
 }
 
-function renderCard(id, title, selectedTypes) {
+function renderCard(id, selectedTypes) {
   const card = document.getElementById(`card-${id}`);
-  const capsule = document.getElementById(`capsule-${id}`);
-  const results = document.getElementById(`results-${id}`);
-
-  capsule.innerHTML = "";
-  results.innerHTML = "";
 
   if (selectedTypes.length === 0) {
     card.classList.add("hidden");
@@ -151,50 +146,6 @@ function renderCard(id, title, selectedTypes) {
   }
 
   card.classList.remove("hidden");
-
-  if (selectedTypes.length === 1) {
-    const t = typesData[selectedTypes[0]];
-    const half = document.createElement("div");
-    half.className = "half";
-    half.style.width = "100%";
-    half.style.backgroundColor = t.color;
-    const img = document.createElement("img");
-    img.src = `https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/${t.icon}.svg`;
-    const span = document.createElement("span");
-    span.textContent = selectedTypes[0];
-    half.appendChild(img);
-    half.appendChild(span);
-    capsule.appendChild(half);
-  } else {
-    const t1 = typesData[selectedTypes[0]];
-    const t2 = typesData[selectedTypes[1]];
-
-    const h1 = document.createElement("div");
-    h1.className = "half";
-    h1.style.width = "50%";
-    h1.style.backgroundColor = t1.color;
-    const img1 = document.createElement("img");
-    img1.src = `https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/${t1.icon}.svg`;
-    const span1 = document.createElement("span");
-    span1.textContent = selectedTypes[0];
-    h1.appendChild(img1);
-    h1.appendChild(span1);
-
-    const h2 = document.createElement("div");
-    h2.className = "half";
-    h2.style.width = "50%";
-    h2.style.backgroundColor = t2.color;
-    h2.style.borderLeft = "2px solid #222";
-    const img2 = document.createElement("img");
-    img2.src = `https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/${t2.icon}.svg`;
-    const span2 = document.createElement("span");
-    span2.textContent = selectedTypes[1];
-    h2.appendChild(img2);
-    h2.appendChild(span2);
-
-    capsule.appendChild(h1);
-    capsule.appendChild(h2);
-  }
 
   let matchups = {};
   Object.keys(typesData).forEach((t) => (matchups[t] = 1));
@@ -205,53 +156,43 @@ function renderCard(id, title, selectedTypes) {
     typeChart[t].imm.forEach((x) => (matchups[x] *= 0));
   });
 
-  const categories = {
-    "Dégâts x4": [],
-    "Dégâts x2": [],
-    "Dégâts x0.5": [],
-    "Dégâts x0.25": [],
-    "Immunisé (x0)": [],
-  };
+  let buffs = [];
+  let debuffs = [];
 
   for (let [type, val] of Object.entries(matchups)) {
-    if (val === 4) categories["Dégâts x4"].push(type);
-    if (val === 2) categories["Dégâts x2"].push(type);
-    if (val === 0.5) categories["Dégâts x0.5"].push(type);
-    if (val === 0.25) categories["Dégâts x0.25"].push(type);
-    if (val === 0) categories["Immunisé (x0)"].push(type);
+    if (val === 4) buffs.push(`${type} (x4)`);
+    if (val === 2) buffs.push(`${type} (x2)`);
+    if (val === 0.5) debuffs.push(`${type} (x0.5)`);
+    if (val === 0.25) debuffs.push(`${type} (x0.25)`);
+    if (val === 0) debuffs.push(`${type} (x0)`);
   }
 
-  for (let [catTitle, list] of Object.entries(categories)) {
-    if (list.length > 0) {
-      const group = document.createElement("div");
-      group.className = "result-group";
-      const h3 = document.createElement("h3");
-      h3.textContent = catTitle;
-      group.appendChild(h3);
+  let dangerTypes = new Set();
+  selectedTypes.forEach((enemyType) => {
+    Object.keys(typeChart).forEach((myType) => {
+      if (typeChart[myType].weak.includes(enemyType)) {
+        dangerTypes.add(myType);
+      }
+    });
+  });
+  const dangerArray = Array.from(dangerTypes);
 
-      const badges = document.createElement("div");
-      badges.className = "badges-container";
+  let html = `<div class="pr-card-content"><div class="pr-title">Ennemi détecté [${selectedTypes.join(" / ")}]</div>`;
 
-      list.forEach((type) => {
-        const badge = document.createElement("div");
-        badge.className = "result-badge";
-        badge.style.backgroundColor = typesData[type].color;
-
-        const img = document.createElement("img");
-        img.src = `https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/${typesData[type].icon}.svg`;
-
-        const span = document.createElement("span");
-        span.textContent = type;
-
-        badge.appendChild(img);
-        badge.appendChild(span);
-        badges.appendChild(badge);
-      });
-
-      group.appendChild(badges);
-      results.appendChild(group);
-    }
+  if (buffs.length > 0) {
+    html += `<div class="pr-section pr-buff"><div class="pr-label">[TAPER AVEC] :</div><div class="pr-value">${buffs.join(", ")}</div></div>`;
   }
+
+  if (debuffs.length > 0) {
+    html += `<div class="pr-section pr-debuff"><div class="pr-label">[DEBUFF] :</div><div class="pr-value">${debuffs.join(", ")}</div></div>`;
+  }
+
+  if (dangerArray.length > 0) {
+    html += `<div class="pr-section pr-danger"><div class="pr-label">[DANGER] :</div><div class="pr-value">${dangerArray.join(", ")}</div></div>`;
+  }
+
+  html += `</div>`;
+  card.innerHTML = html;
 }
 
 document.getElementById("scan-btn").addEventListener("click", async () => {
@@ -303,7 +244,7 @@ document.getElementById("scan-btn").addEventListener("click", async () => {
             if (t1Top !== "Inconnu") p1Types.push(t1Top);
             if (t1Bot !== "Inconnu" && t1Bot !== t1Top) p1Types.push(t1Bot);
 
-            renderCard("p1", "Pokémon 1", p1Types);
+            renderCard("p1", p1Types);
 
             const pxP2Top = getPixel(coords.p2_top);
             const pxP2Bot = getPixel(coords.p2_bot);
@@ -314,7 +255,7 @@ document.getElementById("scan-btn").addEventListener("click", async () => {
             if (t2Top !== "Inconnu") p2Types.push(t2Top);
             if (t2Bot !== "Inconnu" && t2Bot !== t2Top) p2Types.push(t2Bot);
 
-            renderCard("p2", "Pokémon 2", p2Types);
+            renderCard("p2", p2Types);
           };
           img.src = dataUrl;
         },

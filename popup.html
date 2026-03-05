@@ -4,117 +4,59 @@
     <meta charset="UTF-8" />
     <style>
       body {
-        font-family: sans-serif;
-        background-color: #242430;
+        font-family: monospace;
+        background-color: #1a1a24;
         color: white;
-        width: 400px;
+        width: 320px;
         padding: 15px;
-        text-align: center;
         margin: 0;
       }
       button {
-        background-color: #e3350d;
+        background-color: #2b2b36;
         color: white;
-        border: 2px solid #111;
-        padding: 12px;
-        border-radius: 8px;
+        border: 1px solid #4a4a5a;
+        padding: 10px;
+        border-radius: 6px;
         cursor: pointer;
         width: 100%;
         font-weight: bold;
-        font-size: 1.1rem;
+        font-size: 1rem;
         margin-bottom: 15px;
-        box-shadow: 0 4px 0 #8a2008;
-        transition:
-          transform 0.1s,
-          box-shadow 0.1s;
+        font-family: monospace;
       }
-      button:active {
-        transform: translateY(4px);
-        box-shadow: 0 0 0 #8a2008;
-      }
-      .pokemon-card {
-        background: #343444;
-        padding: 15px;
-        border-radius: 12px;
+      .pr-card {
+        background: transparent;
+        padding: 5px;
         margin-bottom: 15px;
+      }
+      .pr-card-content {
+        border-left: 4px solid white;
+        padding-left: 12px;
         text-align: left;
-        border: 2px solid #222;
       }
-      .pokemon-title {
+      .pr-title {
         font-weight: bold;
-        margin-bottom: 15px;
-        font-size: 1.1em;
-        text-align: center;
-        color: #aaa;
-        text-transform: uppercase;
-        letter-spacing: 1px;
+        font-size: 14px;
+        color: #ffffff;
+        margin-bottom: 12px;
       }
-      .target-capsule {
-        display: flex;
-        width: 200px;
-        height: 34px;
-        margin: 0 auto 15px auto;
-        border: 3px solid #222;
-        border-radius: 20px;
-        overflow: hidden;
-        background: #1a1a24;
+      .pr-section {
+        margin-bottom: 10px;
+        font-size: 13px;
       }
-      .half {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100%;
-        font-size: 0.85em;
+      .pr-buff .pr-label,
+      .pr-buff .pr-value {
+        color: #4ade80;
+      }
+      .pr-debuff .pr-label,
+      .pr-debuff .pr-value,
+      .pr-danger .pr-label,
+      .pr-danger .pr-value {
+        color: #f87171;
+      }
+      .pr-label {
         font-weight: bold;
-        text-shadow:
-          1px 1px 0 #000,
-          -1px -1px 0 #000,
-          1px -1px 0 #000,
-          -1px 1px 0 #000;
-        color: white;
-        text-transform: uppercase;
-      }
-      .half img {
-        width: 16px;
-        height: 16px;
-        filter: brightness(0) invert(1);
-        margin-right: 6px;
-      }
-      .result-group h3 {
-        margin: 10px 0 8px 0;
-        color: #fff;
-        font-size: 0.9rem;
-        text-shadow: 1px 1px 2px #000;
-        border-bottom: 2px solid #555;
-        padding-bottom: 4px;
-      }
-      .badges-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-      }
-      .result-badge {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        padding: 4px 10px;
-        border-radius: 20px;
-        border: 2px solid #222;
-        color: white;
-        font-weight: bold;
-        text-transform: uppercase;
-        font-size: 0.75rem;
-        box-shadow: 0 2px 0 #222;
-        text-shadow:
-          1px 1px 0 #000,
-          -1px -1px 0 #000,
-          1px -1px 0 #000,
-          -1px 1px 0 #000;
-      }
-      .result-badge img {
-        width: 14px;
-        height: 14px;
-        filter: brightness(0) invert(1);
+        margin-bottom: 3px;
       }
       .hidden {
         display: none;
@@ -124,17 +66,8 @@
   <body>
     <button id="scan-btn">Scanner l'écran</button>
 
-    <div id="card-p1" class="pokemon-card hidden">
-      <div class="pokemon-title">Pokémon 1</div>
-      <div id="capsule-p1" class="target-capsule"></div>
-      <div id="results-p1"></div>
-    </div>
-
-    <div id="card-p2" class="pokemon-card hidden">
-      <div class="pokemon-title">Pokémon 2</div>
-      <div id="capsule-p2" class="target-capsule"></div>
-      <div id="results-p2"></div>
-    </div>
+    <div id="card-p1" class="pr-card hidden"></div>
+    <div id="card-p2" class="pr-card hidden"></div>
 
     <script src="popup.js"></script>
   </body>
