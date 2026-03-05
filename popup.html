@@ -1,88 +1,141 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
-<head>
-<meta charset="UTF-8">
-<style>
-    body {
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      body {
         font-family: sans-serif;
         background-color: #242430;
         color: white;
-        width: 320px;
+        width: 400px;
         padding: 15px;
         text-align: center;
-    }
-    button {
+        margin: 0;
+      }
+      button {
         background-color: #e3350d;
         color: white;
-        border: none;
-        padding: 10px;
-        border-radius: 5px;
+        border: 2px solid #111;
+        padding: 12px;
+        border-radius: 8px;
         cursor: pointer;
         width: 100%;
         font-weight: bold;
+        font-size: 1.1rem;
         margin-bottom: 15px;
-    }
-    .grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-    }
-    .result {
+        box-shadow: 0 4px 0 #8a2008;
+        transition:
+          transform 0.1s,
+          box-shadow 0.1s;
+      }
+      button:active {
+        transform: translateY(4px);
+        box-shadow: 0 0 0 #8a2008;
+      }
+      .pokemon-card {
         background: #343444;
-        padding: 10px;
-        border-radius: 8px;
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 15px;
+        text-align: left;
+        border: 2px solid #222;
+      }
+      .pokemon-title {
+        font-weight: bold;
+        margin-bottom: 15px;
+        font-size: 1.1em;
+        text-align: center;
+        color: #aaa;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .target-capsule {
+        display: flex;
+        width: 200px;
+        height: 34px;
+        margin: 0 auto 15px auto;
+        border: 3px solid #222;
+        border-radius: 20px;
+        overflow: hidden;
+        background: #1a1a24;
+      }
+      .half {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
         font-size: 0.85em;
-    }
-    .color-box {
-        width: 40px;
-        height: 40px;
-        border: 2px solid white;
-        margin: 5px auto;
-        border-radius: 4px;
-        background-color: transparent;
-    }
-    .check-box {
-        margin-top: 15px;
-        background: #4a4a60;
-        padding: 10px;
-        border-radius: 8px;
-    }
-</style>
-</head>
-<body>
+        font-weight: bold;
+        text-shadow:
+          1px 1px 0 #000,
+          -1px -1px 0 #000,
+          1px -1px 0 #000,
+          -1px 1px 0 #000;
+        color: white;
+        text-transform: uppercase;
+      }
+      .half img {
+        width: 16px;
+        height: 16px;
+        filter: brightness(0) invert(1);
+        margin-right: 6px;
+      }
+      .result-group h3 {
+        margin: 10px 0 8px 0;
+        color: #fff;
+        font-size: 0.9rem;
+        text-shadow: 1px 1px 2px #000;
+        border-bottom: 2px solid #555;
+        padding-bottom: 4px;
+      }
+      .badges-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .result-badge {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border-radius: 20px;
+        border: 2px solid #222;
+        color: white;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        box-shadow: 0 2px 0 #222;
+        text-shadow:
+          1px 1px 0 #000,
+          -1px -1px 0 #000,
+          1px -1px 0 #000,
+          -1px 1px 0 #000;
+      }
+      .result-badge img {
+        width: 14px;
+        height: 14px;
+        filter: brightness(0) invert(1);
+      }
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <button id="scan-btn">Scanner l'écran</button>
 
-    <h2>Testeur PokéRogue</h2>
-    <button id="scan-btn">Capturer l'écran</button>
-
-    <div class="grid">
-        <div class="result">
-            <div><b>Pokémon 1</b><br>Haut</div>
-            <div id="box-p1-haut" class="color-box"></div>
-            <div id="rgb-p1-haut">RGB: -</div>
-        </div>
-        <div class="result">
-            <div><b>Pokémon 1</b><br>Bas</div>
-            <div id="box-p1-bas" class="color-box"></div>
-            <div id="rgb-p1-bas">RGB: -</div>
-        </div>
-        <div class="result">
-            <div><b>Pokémon 2</b><br>Haut</div>
-            <div id="box-p2-haut" class="color-box"></div>
-            <div id="rgb-p2-haut">RGB: -</div>
-        </div>
-        <div class="result">
-            <div><b>Pokémon 2</b><br>Bas</div>
-            <div id="box-p2-bas" class="color-box"></div>
-            <div id="rgb-p2-bas">RGB: -</div>
-        </div>
+    <div id="card-p1" class="pokemon-card hidden">
+      <div class="pokemon-title">Pokémon 1</div>
+      <div id="capsule-p1" class="target-capsule"></div>
+      <div id="results-p1"></div>
     </div>
 
-    <div class="check-box">
-        <div><b>Vérification 2e Pokémon (X:15 Y:30)</b></div>
-        <div id="box-check" class="color-box"></div>
-        <div id="rgb-check">RGB: -</div>
+    <div id="card-p2" class="pokemon-card hidden">
+      <div class="pokemon-title">Pokémon 2</div>
+      <div id="capsule-p2" class="target-capsule"></div>
+      <div id="results-p2"></div>
     </div>
 
     <script src="popup.js"></script>
-</body>
+  </body>
 </html>

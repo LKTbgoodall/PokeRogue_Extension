@@ -1,0 +1,81 @@
+#pr-overlay-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 99999;
+}
+
+#pr-scan-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #2b2b36;
+  color: white;
+  border: 2px solid #4a4a5a;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  pointer-events: auto;
+  z-index: 100000;
+}
+
+.pr-card {
+  position: absolute;
+  background: #2b2b36;
+  padding: 12px;
+  border-radius: 8px;
+  color: white;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  width: 220px;
+  display: none;
+}
+
+.pr-title {
+  font-weight: bold;
+  font-size: 13px;
+  color: #a3a3b0;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+}
+
+.pr-group h3 {
+  margin: 0 0 6px 0;
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+  border-bottom: 1px solid #4a4a5a;
+  padding-bottom: 4px;
+}
+
+.pr-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.pr-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px 2px 4px;
+  border-radius: 12px;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 10px;
+}
+
+.pr-badge img {
+  width: 14px;
+  height: 14px;
+  filter: brightness(0) invert(1);
+}
