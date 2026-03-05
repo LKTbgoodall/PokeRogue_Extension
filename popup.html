@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<style>
+    body {
+        font-family: sans-serif;
+        background-color: #242430;
+        color: white;
+        width: 320px;
+        padding: 15px;
+        text-align: center;
+    }
+    button {
+        background-color: #e3350d;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100%;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+    .result {
+        background: #343444;
+        padding: 10px;
+        border-radius: 8px;
+        font-size: 0.85em;
+    }
+    .color-box {
+        width: 40px;
+        height: 40px;
+        border: 2px solid white;
+        margin: 5px auto;
+        border-radius: 4px;
+        background-color: transparent;
+    }
+    .check-box {
+        margin-top: 15px;
+        background: #4a4a60;
+        padding: 10px;
+        border-radius: 8px;
+    }
+</style>
+</head>
+<body>
+
+    <h2>Testeur PokéRogue</h2>
+    <button id="scan-btn">Capturer l'écran</button>
+
+    <div class="grid">
+        <div class="result">
+            <div><b>Pokémon 1</b><br>Haut</div>
+            <div id="box-p1-haut" class="color-box"></div>
+            <div id="rgb-p1-haut">RGB: -</div>
+        </div>
+        <div class="result">
+            <div><b>Pokémon 1</b><br>Bas</div>
+            <div id="box-p1-bas" class="color-box"></div>
+            <div id="rgb-p1-bas">RGB: -</div>
+        </div>
+        <div class="result">
+            <div><b>Pokémon 2</b><br>Haut</div>
+            <div id="box-p2-haut" class="color-box"></div>
+            <div id="rgb-p2-haut">RGB: -</div>
+        </div>
+        <div class="result">
+            <div><b>Pokémon 2</b><br>Bas</div>
+            <div id="box-p2-bas" class="color-box"></div>
+            <div id="rgb-p2-bas">RGB: -</div>
+        </div>
+    </div>
+
+    <div class="check-box">
+        <div><b>Vérification 2e Pokémon (X:15 Y:30)</b></div>
+        <div id="box-check" class="color-box"></div>
+        <div id="rgb-check">RGB: -</div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>
